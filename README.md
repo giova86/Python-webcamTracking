@@ -9,7 +9,7 @@ https://obsproject.com
 
 ## Python
 
-This code is tested to work with Python 3.9
+This code is tested to work with Python 3.9. At the moment it doesn't work on Mac Silicon. In order to avoid the problem use the terminal in Rosetta mode.
 
 ## Requirements
 
