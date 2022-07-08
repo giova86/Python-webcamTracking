@@ -1,4 +1,4 @@
-# Python-virtualCamera
+# Head Tracking
 This code creates a virtual webcam that can be used in conference calls. One of the features implemented is face tracking. The webcam will follow the head of the speaker centering on the image.
 
 ## External Software
