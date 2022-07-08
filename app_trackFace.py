@@ -17,6 +17,11 @@ while True:
     index += 1
 print(arr)
 
+start_x = 0
+start_y = 0
+stop_x = 1000
+stop_y = 600
+
 # mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
