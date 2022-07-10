@@ -24,12 +24,12 @@ print()
 
 # width_cropped = width_out
 # height_cropped = height_out
-media_mobile = 100
+media_mobile = 40
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
-drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
+#drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
 baricentro_x = []
 baricentro_y = []
@@ -45,13 +45,13 @@ print(f'Width: {int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))}')
 print(f'FPS: {int(vc.get(cv2.CAP_PROP_FPS))}')
 print()
 
-# pref_width = 1280
-# pref_height = 720
-# pref_fps = 30
+pref_width = 1280
+pref_height = 720
+pref_fps = 30
 
-# vc.set(cv2.CAP_PROP_FRAME_WIDTH, pref_width)
-# vc.set(cv2.CAP_PROP_FRAME_HEIGHT, pref_height)
-# vc.set(cv2.CAP_PROP_FPS, pref_fps)
+vc.set(cv2.CAP_PROP_FRAME_WIDTH, pref_width)
+vc.set(cv2.CAP_PROP_FRAME_HEIGHT, pref_height)
+vc.set(cv2.CAP_PROP_FPS, pref_fps)
 
 # Query final capture device values
 # (may be different from preferred settings)
@@ -59,11 +59,17 @@ width = int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = vc.get(cv2.CAP_PROP_FPS)
 
+print('-- Original Output Settings -----------------------------------')
+print(f'Height: {height}')
+print(f'Width: {width}')
+print(f'FPS: {int(fps)}')
+print()
+
 # with mp_holistic.Holistic(
 #     min_detection_confidence=0.5,
 #     min_tracking_confidence=0.5) as holistic:
 
-zoom_scale = 1.5
+zoom_scale = 1.3
 width_out = int(width/zoom_scale)
 height_out = int(height/zoom_scale)
 
@@ -93,16 +99,11 @@ with mp_face_mesh.FaceMesh(
         while True:
             ret, image = vc.read()
 
-            # image, results2 = mediapipe_detection(image, holistic)
-
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = face_mesh.process(image)
-            image_shape = image.shape
 
-            #img = np.zeros((image_shape[0], image_shape[1], 3), np.uint8)
-
-            # Draw the face mesh annotations on the image.
+            # calculate height and width.
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             if results.multi_face_landmarks:
@@ -116,20 +117,21 @@ with mp_face_mesh.FaceMesh(
                     x_face = (x_face_max + x_face_min)/2
                     y_face = (y_face_max + y_face_min)/2
 
-                    x_face=int(x_face*image.shape[1])
-                    y_face=int(y_face*image.shape[0])
+                    x_face=int(x_face*width)
+                    y_face=int(y_face*height)
 
                     baricentro_x.append(x_face)
                     baricentro_y.append(y_face)
 
-                    if len(baricentro_x) > media_mobile:
+                    smooth = len(baricentro_x)
+                    if smooth > media_mobile:
                         del baricentro_x[0]
                         del baricentro_y[0]
                         x_face = int(sum(baricentro_x)/media_mobile)
                         y_face = int(sum(baricentro_y)/media_mobile)
                     else:
-                        x_face = int(sum(baricentro_x)/len(baricentro_x))
-                        y_face = int(sum(baricentro_y)/len(baricentro_y))
+                        x_face = int(sum(baricentro_x)/smooth)
+                        y_face = int(sum(baricentro_y)/smooth)
 
                     if y_face - height_out/2 < 0:
                         start_y = 0
@@ -163,4 +165,4 @@ with mp_face_mesh.FaceMesh(
                 print("Quit system")
                 break
             if cv2.waitKey(33) == ord('z'):
-                print("Tracking OFF")
+                print("Tracking OFF")                       # To be done
