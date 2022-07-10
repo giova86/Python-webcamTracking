@@ -162,3 +162,5 @@ with mp_face_mesh.FaceMesh(
             if cv2.waitKey(33) == ord('q'):
                 print("Quit system")
                 break
+            if cv2.waitKey(33) == ord('z'):
+                print("Tracking OFF")
