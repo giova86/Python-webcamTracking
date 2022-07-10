@@ -17,8 +17,24 @@ This code is tested to work with Python 3.9. At the moment it doesn't work on Ma
 pip install -r requirements.txt
 ```
 
-## Run
+## Run and optional arguments
 
 ```
 python app_trackFace.py
+```
+
+```
+python app_trackFace.py --help
+  -h, --help            show this help message and exit
+  -a ACTIVE_AREA, --area ACTIVE_AREA
+                        Active area for tracking
+  -s AVERAGE_SMOOTH, --smooth AVERAGE_SMOOTH
+                        Smooth tracking taking average position last N points.
+                        Default is 60
+  -ow PREFERRED_WIDTH, --output_width PREFERRED_WIDTH
+                        Threshold for prediction. A number between 0 and 1.
+                        default is 0.5
+  -oh PREFERRED_HEIGHT, --output_height PREFERRED_HEIGHT
+                        Threshold for prediction. A number between 0 and 1.
+                        default is 0.5
 ```
