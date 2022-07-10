@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
-                    help="Active area for tracking")
+                    help="Active area for tracking", type=float)
 parser.add_argument("-s", "--smooth", dest="average_smooth", default=60, type=int,
                     help="Smooth tracking taking average position last N points. Default is 60")
 parser.add_argument("-ow", "--output_width", dest="preferred_width", default=1280, type=int,
@@ -130,9 +130,6 @@ with mp_face_mesh.FaceMesh(
                     x_face = int((x_face_max + x_face_min)/2*width)
                     y_face = int((y_face_max + y_face_min)/2*height)
 
-                    # x_face=int(x_face*width)
-                    # y_face=int(y_face*height)
-
                     baricentro_x.append(x_face)
                     baricentro_y.append(y_face)
 
@@ -179,7 +176,7 @@ with mp_face_mesh.FaceMesh(
             #     break
             # if cv2.waitKey(1) == ord('z'):
             #     tracking = False
-            #     print("Tracking OFF")                       # To be done
+            #     print("Tracking OFF")                      # To be done
             # if cv2.waitKey(1) == ord('x'):
             #     tracking = True
             #     print("Tracking ON")                       # To be done
