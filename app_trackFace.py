@@ -4,6 +4,18 @@ from pyvirtualcam import PixelFormat
 import mediapipe as mp
 import numpy as np
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, draw_limit_rh, draw_limit_lh, check_detection
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument("-a", "--area", dest="active_area", default=1.2,
+                    help="Active area for tracking")
+parser.add_argument("-s", "--smooth", dest="average_smooth", default=60, type=int,
+                    help="Smooth tracking taking average position last N points. Default is 60")
+parser.add_argument("-ow", "--output_width", dest="preferred_width", default=1280, type=int,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+args = parser.parse_args()
 
 index = 0
 arr = []
@@ -24,7 +36,7 @@ print()
 
 # width_cropped = width_out
 # height_cropped = height_out
-media_mobile = 60
+media_mobile = args.average_smooth
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -45,8 +57,8 @@ print(f'Width: {int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))}')
 print(f'FPS: {int(vc.get(cv2.CAP_PROP_FPS))}')
 print()
 
-pref_width = 1920
-pref_height = 1080
+pref_width = args.preferred_width
+pref_height = args.preferred_height
 pref_fps = 30
 
 vc.set(cv2.CAP_PROP_FRAME_WIDTH, pref_width)
@@ -69,7 +81,7 @@ print()
 #     min_detection_confidence=0.5,
 #     min_tracking_confidence=0.5) as holistic:
 
-zoom_scale = 1.3
+zoom_scale = args.active_area
 width_out = int(width/zoom_scale)
 height_out = int(height/zoom_scale)
 
