@@ -114,11 +114,11 @@ with mp_face_mesh.FaceMesh(
                     x_face_max = face_landmarks.landmark[447].x
                     y_face_max = face_landmarks.landmark[447].y
 
-                    x_face = (x_face_max + x_face_min)/2
-                    y_face = (y_face_max + y_face_min)/2
+                    x_face = int((x_face_max + x_face_min)/2*width)
+                    y_face = int((y_face_max + y_face_min)/2*height)
 
-                    x_face=int(x_face*width)
-                    y_face=int(y_face*height)
+                    # x_face=int(x_face*width)
+                    # y_face=int(y_face*height)
 
                     baricentro_x.append(x_face)
                     baricentro_y.append(y_face)
@@ -136,9 +136,9 @@ with mp_face_mesh.FaceMesh(
                     if y_face - height_out/2 < 0:
                         start_y = 0
                         stop_y = height_out
-                    elif y_face + height_out/2 > image.shape[0]:
-                        start_y =  image.shape[0] - height_out
-                        stop_y = image.shape[0]
+                    elif y_face + height_out/2 > height:
+                        start_y =  height - height_out
+                        stop_y = height
                     else:
                         start_y = y_face-height_out/2
                         stop_y = y_face+height_out/2
@@ -146,9 +146,9 @@ with mp_face_mesh.FaceMesh(
                     if x_face - width_out/2 < 0:
                         start_x = 0
                         stop_x = width_out
-                    elif x_face + width_out/2 > image.shape[1]:
-                        start_x = image.shape[1] - width_out
-                        stop_x = image.shape[1]
+                    elif x_face + width_out/2 > width:
+                        start_x = width - width_out
+                        stop_x = width
                     else:
                         start_x = x_face - width_out/2
                         stop_x = x_face + width_out/2
@@ -161,8 +161,8 @@ with mp_face_mesh.FaceMesh(
             cv2.imshow('check video2', image_crop)          # Scommenta per testare
             cam.send(image_crop)
             cam.sleep_until_next_frame()
-            if cv2.waitKey(33) == ord('q'):
+            if cv2.waitKey(1) == ord('q'):
                 print("Quit system")
                 break
-            if cv2.waitKey(33) == ord('z'):
-                print("Tracking OFF")                       # To be done
+            # if cv2.waitKey(33) == ord('z'):
+            #     print("Tracking OFF")                       # To be done
