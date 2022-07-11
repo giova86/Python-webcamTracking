@@ -25,16 +25,21 @@ python app_trackFace.py
 
 ```
 python app_trackFace.py --help
+usage: app_trackFace.py [-h] [-a ACTIVE_AREA] [-s AVERAGE_SMOOTH]
+                        [-ow PREFERRED_WIDTH] [-oh PREFERRED_HEIGHT]
+                        [-c CAMERA_ID]
+
+optional arguments:
   -h, --help            show this help message and exit
   -a ACTIVE_AREA, --area ACTIVE_AREA
                         Active area for tracking
   -s AVERAGE_SMOOTH, --smooth AVERAGE_SMOOTH
                         Smooth tracking taking average position last N points.
-                        Default is 60
+                        Default is 60.
   -ow PREFERRED_WIDTH, --output_width PREFERRED_WIDTH
-                        Threshold for prediction. A number between 0 and 1.
-                        default is 0.5
+                        Width of the image. Default value is 1280px.
   -oh PREFERRED_HEIGHT, --output_height PREFERRED_HEIGHT
-                        Threshold for prediction. A number between 0 and 1.
-                        default is 0.5
+                        Height of the image. Default value is 720px.
+  -c CAMERA_ID, --camera_id CAMERA_ID
+                        Select camera device ID. An integer from 0 to N.
 ```
