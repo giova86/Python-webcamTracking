@@ -170,6 +170,7 @@ with mp_face_mesh.FaceMesh(
                     # cv2.fillConvexPoly(mask, convexhull, 255)
                     #
                     # image_copy = cv2.blur(image, (27, 27))
+                    # image_copy = image
                     # face_extracted = cv2.bitwise_and(image_copy, image_copy, mask=mask)
                     #
                     # mask = (255-mask)
