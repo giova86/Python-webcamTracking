@@ -15,6 +15,8 @@ parser.add_argument("-ow", "--output_width", dest="preferred_width", default=128
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
 parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
+                    help="Select camera device ID. An integer from 0 to N")
 args = parser.parse_args()
 
 index = 0
