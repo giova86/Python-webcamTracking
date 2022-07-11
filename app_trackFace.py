@@ -5,29 +5,6 @@ import mediapipe as mp
 import numpy as np
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, draw_limit_rh, draw_limit_lh, check_detection
 from argparse import ArgumentParser
-#from facial_landmarks import FaceLandmarks
-
-class FaceLandmarks:
-    def __init__(self):
-        mp_face_mesh = mp.solutions.face_mesh
-        self.face_mesh = mp_face_mesh.FaceMesh(max_num_faces=6, min_detection_confidence=0.2)
-
-
-    def get_facial_landmarks(self, frame):
-        height, width, _ = frame.shape
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        result = self.face_mesh.process(frame_rgb)
-
-        facelandmarks = []
-        for facial_landmarks in result.multi_face_landmarks:
-            for i in range(0, 468):
-                pt1 = facial_landmarks.landmark[i]
-                x = int(pt1.x * width)
-                y = int(pt1.y * height)
-                facelandmarks.append([x, y])
-
-
-        return np.array(facelandmarks, np.int32)
 
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
@@ -59,14 +36,11 @@ print('------------------------------------')
 print(arr)
 print()
 
-# width_cropped = width_out
-# height_cropped = height_out
 media_mobile = args.average_smooth
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
-#drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
 baricentro_x = []
 baricentro_y = []
@@ -107,10 +81,6 @@ print(f'Width: {width}')
 print(f'FPS: {int(fps)}')
 print()
 
-# with mp_holistic.Holistic(
-#     min_detection_confidence=0.5,
-#     min_tracking_confidence=0.5) as holistic:
-
 zoom_scale = args.active_area
 width_out = int(width/zoom_scale)
 height_out = int(height/zoom_scale)
@@ -126,8 +96,6 @@ print(f'Width: {width_out}')
 print(f'Active Area: {round(1/zoom_scale,2)}%')
 print()
 
-
-
 with mp_face_mesh.FaceMesh(
     max_num_faces=1,
     refine_landmarks=True,
@@ -142,8 +110,7 @@ with mp_face_mesh.FaceMesh(
 
         while True:
             ret, image = vc.read()
-            fl = FaceLandmarks()
-
+        
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = face_mesh.process(image)
