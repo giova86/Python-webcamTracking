@@ -5,6 +5,29 @@ import mediapipe as mp
 import numpy as np
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, draw_limit_rh, draw_limit_lh, check_detection
 from argparse import ArgumentParser
+#from facial_landmarks import FaceLandmarks
+
+class FaceLandmarks:
+    def __init__(self):
+        mp_face_mesh = mp.solutions.face_mesh
+        self.face_mesh = mp_face_mesh.FaceMesh(max_num_faces=6, min_detection_confidence=0.2)
+
+
+    def get_facial_landmarks(self, frame):
+        height, width, _ = frame.shape
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        result = self.face_mesh.process(frame_rgb)
+
+        facelandmarks = []
+        for facial_landmarks in result.multi_face_landmarks:
+            for i in range(0, 468):
+                pt1 = facial_landmarks.landmark[i]
+                x = int(pt1.x * width)
+                y = int(pt1.y * height)
+                facelandmarks.append([x, y])
+
+
+        return np.array(facelandmarks, np.int32)
 
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
@@ -103,6 +126,8 @@ print(f'Width: {width_out}')
 print(f'Active Area: {round(1/zoom_scale,2)}%')
 print()
 
+
+
 with mp_face_mesh.FaceMesh(
     max_num_faces=1,
     refine_landmarks=True,
@@ -117,6 +142,7 @@ with mp_face_mesh.FaceMesh(
 
         while True:
             ret, image = vc.read()
+            fl = FaceLandmarks()
 
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -128,6 +154,29 @@ with mp_face_mesh.FaceMesh(
 
             if results.multi_face_landmarks:
                 for face_landmarks in results.multi_face_landmarks:
+
+                    # blur = []
+                    # for i in range(0, 468):
+                    #     pt1 = face_landmarks.landmark[i]
+                    #     x = int(pt1.x * width)
+                    #     y = int(pt1.y * height)
+                    #     blur.append([x, y])
+                    # blur = np.array(blur, np.int32)
+                    # convexhull = cv2.convexHull(blur)
+                    #
+                    # h, w = image.shape[:2]
+                    # mask = np.zeros((h, w), np.uint8)
+                    #
+                    # cv2.fillConvexPoly(mask, convexhull, 255)
+                    #
+                    # image_copy = cv2.blur(image, (27, 27))
+                    # face_extracted = cv2.bitwise_and(image_copy, image_copy, mask=mask)
+                    #
+                    # mask = (255-mask)
+                    # background_mask = cv2.bitwise_not(mask)
+                    # background = cv2.bitwise_and(image, image, mask=background_mask)
+                    # image = cv2.add(background, face_extracted)
+
                     x_face_min = face_landmarks.landmark[234].x
                     y_face_min = face_landmarks.landmark[234].y
 
