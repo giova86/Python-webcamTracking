@@ -10,13 +10,13 @@ parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
                     help="Active area for tracking", type=float)
 parser.add_argument("-s", "--smooth", dest="average_smooth", default=60, type=int,
-                    help="Smooth tracking taking average position last N points. Default is 60")
+                    help="Smooth tracking taking average position last N points. Default is 60.")
 parser.add_argument("-ow", "--output_width", dest="preferred_width", default=1280, type=int,
-                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+                    help="Width of the image. Default value is 1280px.")
 parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
-                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+                    help="Height of the image. Default value is 720px.")
 parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
-                    help="Select camera device ID. An integer from 0 to N")
+                    help="Select camera device ID. An integer from 0 to N.")
 args = parser.parse_args()
 
 index = 0
