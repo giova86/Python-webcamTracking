@@ -48,10 +48,15 @@ mp_face_mesh = mp.solutions.face_mesh
 baricentro_x = []
 baricentro_y = []
 
-vc = cv2.VideoCapture(1)
+vc = cv2.VideoCapture(args.camera_id)
 
 if not vc.isOpened():
     raise RuntimeError('Could not open video source')
+
+print('-- Camera Settings -----------------------------------')
+print(f'Device ID: {args.camera_id}')
+print()
+
 
 print('-- Camera Settings -----------------------------------')
 print(f'Height: {int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))}')
