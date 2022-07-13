@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-
+import numpy as np
 import cv2
 import mediapipe as mp
 import pyvirtualcam
@@ -121,29 +121,6 @@ with mp_face_mesh.FaceMesh(
             if results.multi_face_landmarks:
                 for face_landmarks in results.multi_face_landmarks:
 
-                    # blur = []
-                    # for i in range(0, 468):
-                    #     pt1 = face_landmarks.landmark[i]
-                    #     x = int(pt1.x * width)
-                    #     y = int(pt1.y * height)
-                    #     blur.append([x, y])
-                    # blur = np.array(blur, np.int32)
-                    # convexhull = cv2.convexHull(blur)
-                    #
-                    # h, w = image.shape[:2]
-                    # mask = np.zeros((h, w), np.uint8)
-                    #
-                    # cv2.fillConvexPoly(mask, convexhull, 255)
-                    #
-                    # image_copy = cv2.blur(image, (27, 27))
-                    # image_copy = image
-                    # face_extracted = cv2.bitwise_and(image_copy, image_copy, mask=mask)
-                    #
-                    # mask = (255-mask)
-                    # background_mask = cv2.bitwise_not(mask)
-                    # background = cv2.bitwise_and(image, image, mask=background_mask)
-                    # image = cv2.add(background, face_extracted)
-
                     x_face_min = face_landmarks.landmark[234].x
                     y_face_min = face_landmarks.landmark[234].y
 
@@ -153,40 +130,41 @@ with mp_face_mesh.FaceMesh(
                     x_face = int((x_face_max + x_face_min)/2*width)
                     y_face = int((y_face_max + y_face_min)/2*height)
 
-                    baricentro_x.append(x_face)
-                    baricentro_y.append(y_face)
+                baricentro_x.append(x_face)
+                baricentro_y.append(y_face)
 
-                    smooth = len(baricentro_x)
-                    if smooth > media_mobile:
-                        del baricentro_x[0]
-                        del baricentro_y[0]
-                        x_face = int(sum(baricentro_x)/media_mobile)
-                        y_face = int(sum(baricentro_y)/media_mobile)
-                    else:
-                        x_face = int(sum(baricentro_x)/smooth)
-                        y_face = int(sum(baricentro_y)/smooth)
+                smooth = len(baricentro_x)
 
-                    if y_face - height_out/2 < 0:
-                        start_y = 0
-                        stop_y = height_out
-                    elif y_face + height_out/2 > height:
-                        start_y =  height - height_out
-                        stop_y = height
-                    else:
-                        start_y = y_face-height_out/2
-                        stop_y = y_face+height_out/2
+                if smooth > media_mobile:
+                    del baricentro_x[0]
+                    del baricentro_y[0]
+                    x_face = int(sum(baricentro_x)/media_mobile)
+                    y_face = int(sum(baricentro_y)/media_mobile)
+                else:
+                    x_face = int(sum(baricentro_x)/smooth)
+                    y_face = int(sum(baricentro_y)/smooth)
 
-                    if x_face - width_out/2 < 0:
-                        start_x = 0
-                        stop_x = width_out
-                    elif x_face + width_out/2 > width:
-                        start_x = width - width_out
-                        stop_x = width
-                    else:
-                        start_x = x_face - width_out/2
-                        stop_x = x_face + width_out/2
+                if y_face - height_out/2 < 0:
+                    start_y = 0
+                    stop_y = height_out
+                elif y_face + height_out/2 > height:
+                    start_y =  height - height_out
+                    stop_y = height
+                else:
+                    start_y = y_face-height_out/2
+                    stop_y = y_face+height_out/2
 
-                    image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
+                if x_face - width_out/2 < 0:
+                    start_x = 0
+                    stop_x = width_out
+                elif x_face + width_out/2 > width:
+                    start_x = width - width_out
+                    stop_x = width
+                else:
+                    start_x = x_face - width_out/2
+                    stop_x = x_face + width_out/2
+
+                image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
 
             else:
                 image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
