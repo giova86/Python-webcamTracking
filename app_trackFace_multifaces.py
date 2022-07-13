@@ -108,7 +108,7 @@ with mp_face_mesh.FaceMesh(
 
         while True:
             ret, image = vc.read()
-        
+
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = face_mesh.process(image)
@@ -118,8 +118,9 @@ with mp_face_mesh.FaceMesh(
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             if results.multi_face_landmarks:
+                x_temp = []
+                y_temp = []
                 for face_landmarks in results.multi_face_landmarks:
-
                     x_face_min = face_landmarks.landmark[234].x
                     y_face_min = face_landmarks.landmark[234].y
 
@@ -129,16 +130,21 @@ with mp_face_mesh.FaceMesh(
                     x_face = int((x_face_max + x_face_min)/2*width)
                     y_face = int((y_face_max + y_face_min)/2*height)
 
-                    baricentro_x.append(x_face)
-                    baricentro_y.append(y_face)
+                    x_temp.append(x_face)
+                    y_temp.append(y_face)
+
+                x_face = sum(x_temp)/len(results.multi_face_landmarks)
+                y_face = sum(y_temp)/len(results.multi_face_landmarks)
+
+                baricentro_x.append(x_face)
+                baricentro_y.append(y_face)
 
                 smooth = len(baricentro_x)
-                if smooth > media_mobile:
-                    for i in range(len(results.multi_face_landmarks)):
-                        del baricentro_x[0]
-                        del baricentro_y[0]
-                        x_face = int(sum(baricentro_x)/media_mobile)
-                        y_face = int(sum(baricentro_y)/media_mobile)
+                if smooth >= media_mobile:
+                    del baricentro_x[0]
+                    del baricentro_y[0]
+                    x_face = int(sum(baricentro_x)/media_mobile)
+                    y_face = int(sum(baricentro_y)/media_mobile)
                 else:
                     x_face = int(sum(baricentro_x)/smooth)
                     y_face = int(sum(baricentro_y)/smooth)

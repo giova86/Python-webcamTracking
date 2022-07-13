@@ -109,7 +109,7 @@ with mp_face_mesh.FaceMesh(
 
         while True:
             ret, image = vc.read()
-        
+
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = face_mesh.process(image)
