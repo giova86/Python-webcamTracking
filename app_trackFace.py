@@ -16,6 +16,8 @@ parser.add_argument("-oh", "--output_height", dest="preferred_height", default=7
                     help="Height of the image. Default value is 720px.")
 parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
                     help="Select camera device ID. An integer from 0 to N.")
+parser.add_argument("-f", "--fps", dest="camera_fps", default=10, type=int,
+                    help="Select camera device FPS. An integer from 0 to N.")
 args = parser.parse_args()
 
 index = 0
@@ -62,8 +64,7 @@ print()
 
 pref_width = args.preferred_width
 pref_height = args.preferred_height
-pref_fps = 30
-
+pref_fps = args.camera_fps
 vc.set(cv2.CAP_PROP_FRAME_WIDTH, pref_width)
 vc.set(cv2.CAP_PROP_FRAME_HEIGHT, pref_height)
 vc.set(cv2.CAP_PROP_FPS, pref_fps)
