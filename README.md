@@ -1,6 +1,14 @@
 # Head Tracking
 This code creates a virtual webcam that can be used in conference calls. One of the features implemented is face tracking. The webcam will follow the head of the speaker centering on the image.
 
+<br>
+<p align="center">
+  <img width="320"  src="./images/1.png">
+  <img width="320"  src="./images/2.png">
+  <img width="320"  src="./images/3.png">
+</p> 
+<br>
+
 ## External Software
 
 Download and Install OBS Studio:
