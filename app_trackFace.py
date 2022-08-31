@@ -173,9 +173,9 @@ with mp_face_mesh.FaceMesh(
             cv2.imshow('check video2', image_crop)          # Scommenta per testare
             cam.send(image_crop)
             cam.sleep_until_next_frame()
-            # if cv2.waitKey(1) == ord('q'):
-            #     print("Quit system")
-            #     break
+            if cv2.waitKey(1) == ord('q'):
+                print("Quit system")
+                break
             # if cv2.waitKey(1) == ord('z'):
             #     tracking = False
             #     print("Tracking OFF")                      # To be done
