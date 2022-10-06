@@ -90,7 +90,7 @@ start_y = 0
 stop_x = width_out
 stop_y = height_out
 
-print('-- Output Settings -----------------------------------')
+print('-- Output Settings (Before Rescale ----------------------------')
 print(f'Height: {height_out}')
 print(f'Width: {width_out}')
 print(f'Active Area: {round(1/zoom_scale,2)}%')
@@ -103,7 +103,7 @@ with mp_face_mesh.FaceMesh(
     min_tracking_confidence=0.5) as face_mesh:
 
     # with pyvirtualcam.Camera(width, height, fps, fmt=PixelFormat.BGR) as cam:
-    with pyvirtualcam.Camera(width_out, height_out, fps, fmt=PixelFormat.BGR) as cam:
+    with pyvirtualcam.Camera(width, height, fps, fmt=PixelFormat.BGR) as cam:
         print()
         print('Virtual camera device: ' + cam.device)
         print()
@@ -171,7 +171,8 @@ with mp_face_mesh.FaceMesh(
                 image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
 
             cv2.imshow('check video2', image_crop)          # Scommenta per testare
-            cam.send(image_crop)
+            resized = cv2.resize(image_crop, (width, height), interpolation = cv2.INTER_AREA)
+            cam.send(resized)
             cam.sleep_until_next_frame()
             if cv2.waitKey(1) == ord('q'):
                 print("Quit system")
