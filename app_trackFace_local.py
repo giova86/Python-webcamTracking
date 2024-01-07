@@ -1,9 +1,6 @@
 from argparse import ArgumentParser
-import numpy as np
 import cv2
 import mediapipe as mp
-import pyvirtualcam
-from pyvirtualcam import PixelFormat
 
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
