@@ -14,7 +14,7 @@ parser.add_argument("-ow", "--output_width", dest="preferred_width", default=128
                     help="Width of the image. Default value is 1280px.")
 parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
                     help="Height of the image. Default value is 720px.")
-parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
+parser.add_argument("-c", "--camera_id", dest="camera_id", default=0, type=int,
                     help="Select camera device ID. An integer from 0 to N.")
 args = parser.parse_args()
 
