@@ -347,8 +347,8 @@ with mp_face_mesh.FaceMesh(
 
                 # Resize for display
                 resized = cv2.resize(image_crop, (width, height), interpolation=cv2.INTER_AREA)
-                cv2.putText(resized, "Unified View", (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                            1, (0, 255, 0), 2, cv2.LINE_AA)
+                # cv2.putText(resized, "Unified View", (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                #             1, (0, 255, 0), 2, cv2.LINE_AA)
 
                 # Display both images
                 cv2.imshow('Multi-Face Tracking - Original', original_image)
@@ -441,10 +441,10 @@ with mp_face_mesh.FaceMesh(
             cv2.line(split_image, (half_width, 0), (half_width, height), (255, 255, 255), 2)
 
             # Add labels
-            cv2.putText(split_image, f"Face {left_id}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        1, (0, 255, 0), 2, cv2.LINE_AA)
-            cv2.putText(split_image, f"Face {right_id}", (half_width + 10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        1, (0, 0, 255), 2, cv2.LINE_AA)
+            # cv2.putText(split_image, f"Face {left_id}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+            #             1, (0, 255, 0), 2, cv2.LINE_AA)
+            # cv2.putText(split_image, f"Face {right_id}", (half_width + 10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+            #             1, (0, 0, 255), 2, cv2.LINE_AA)
 
             # Display both images
             cv2.imshow('Multi-Face Tracking - Original', original_image)
