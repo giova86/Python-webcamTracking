@@ -6,15 +6,15 @@ import time
 
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
-                    help="Active area for tracking", type=float)
+                    help="Active area for tracking. Default is 1.2", type=float)
 parser.add_argument("-s", "--smooth", dest="average_smooth", default=30, type=int,
                     help="Smooth tracking taking average position last N points. Default is 30.")
 parser.add_argument("-ow", "--output_width", dest="preferred_width", default=1280, type=int,
                     help="Width of the image. Default value is 1280px.")
 parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
                     help="Height of the image. Default value is 720px.")
-parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
-                    help="Select camera device ID. An integer from 0 to N.")
+parser.add_argument("-c", "--camera_id", dest="camera_id", default=0, type=int,
+                    help="Select camera device ID. An integer from 0 to N. Default is 0.")
 parser.add_argument("-f", "--fps", dest="camera_fps", default=30, type=int,
                     help="Select camera device FPS. An integer from 0 to N.")
 parser.add_argument("-w", "--weights", dest="weight_recent", default=0.3, type=float,
