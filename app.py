@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import mediapipe as mp
 import time
-
+print('------------------------------------')
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
                     help="Active area for tracking. Default is 1.2", type=float)
@@ -248,16 +248,16 @@ with mp_face_mesh.FaceMesh(
             start_x = x_face - width_out/2
             stop_x = x_face + width_out/2
 
-        # # Draw face tracking information
-        # if face_detected_current_frame:
-        #     cv2.circle(image, (x_face, y_face), 5, (0, 255, 0), -1)
-        # elif face_detected:
-        #     cv2.circle(image, (x_face, y_face), 5, (0, 255, 255), -1)
-        #
-        # cv2.rectangle(image,
-        #               (int(start_x), int(start_y)),
-        #               (int(stop_x), int(stop_y)),
-        #               (0, 255, 0), 2)
+        # Draw face tracking information
+        if face_detected_current_frame:
+            cv2.circle(image, (x_face, y_face), 5, (0, 255, 0), -1)
+        elif face_detected:
+            cv2.circle(image, (x_face, y_face), 5, (0, 255, 255), -1)
+
+        cv2.rectangle(image,
+                      (int(start_x), int(start_y)),
+                      (int(stop_x), int(stop_y)),
+                      (0, 255, 0), 2)
 
         # Crop the image
         image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
