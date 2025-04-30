@@ -8,13 +8,13 @@ import math
 parser = ArgumentParser()
 parser.add_argument("-a", "--area", dest="active_area", default=1.2,
                     help="Active area for tracking", type=float)
-parser.add_argument("-s", "--smooth", dest="average_smooth", default=15, type=int,
+parser.add_argument("-s", "--smooth", dest="average_smooth", default=30, type=int,
                     help="Smooth tracking taking average position last N points. Default is 15.")
 parser.add_argument("-ow", "--output_width", dest="preferred_width", default=1280, type=int,
                     help="Width of the image. Default value is 1280px.")
 parser.add_argument("-oh", "--output_height", dest="preferred_height", default=720, type=int,
                     help="Height of the image. Default value is 720px.")
-parser.add_argument("-c", "--camera_id", dest="camera_id", default=1, type=int,
+parser.add_argument("-c", "--camera_id", dest="camera_id", default=0, type=int,
                     help="Select camera device ID. An integer from 0 to N.")
 parser.add_argument("-f", "--fps", dest="camera_fps", default=30, type=int,
                     help="Select camera device FPS. An integer from 0 to N.")
@@ -279,10 +279,21 @@ with mp_face_mesh.FaceMesh(
 
         if results.multi_face_landmarks:
             for face_idx, face_landmarks in enumerate(results.multi_face_landmarks):
-                # Get face center using nose landmark
-                nose_tip = face_landmarks.landmark[1]
-                x_face = int(nose_tip.x * width)
-                y_face = int(nose_tip.y * height)
+                # Get face center using nose landmark //replaced with face center
+                # nose_tip = face_landmarks.landmark[1]
+                # x_face = int(nose_tip.x * width)
+                # y_face = int(nose_tip.y * height)
+
+                x_face_min = face_landmarks.landmark[234].x
+                y_face_min = face_landmarks.landmark[234].y
+
+                x_face_max = face_landmarks.landmark[447].x
+                y_face_max = face_landmarks.landmark[447].y
+
+                x_face = int((x_face_max + x_face_min)/2*width)
+                y_face = int((y_face_max + y_face_min)/2*height)
+
+
                 face_positions.append((x_face, y_face))
 
                 # Draw face landmark
