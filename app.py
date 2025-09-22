@@ -113,17 +113,58 @@ def exp_filter(new_val, old_val, alpha):
         return new_val
     return alpha * new_val + (1 - alpha) * old_val
 
-with mp_face_mesh.FaceMesh(
-    max_num_faces=1,
-    refine_landmarks=True,
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5) as face_mesh:
+# Prova diverse configurazioni per FaceMesh
+face_mesh_configs = [
+    # Configurazione 1: senza refine_landmarks
+    {
+        'max_num_faces': 1,
+        'refine_landmarks': False,
+        'min_detection_confidence': 0.5,
+        'min_tracking_confidence': 0.5
+    },
+    # Configurazione 2: con confidence più alta
+    {
+        'max_num_faces': 1,
+        'refine_landmarks': True,
+        'min_detection_confidence': 0.7,
+        'min_tracking_confidence': 0.7
+    },
+    # Configurazione 3: parametri minimi
+    {
+        'max_num_faces': 1
+    },
+    # Configurazione 4: solo con detection confidence
+    {
+        'max_num_faces': 1,
+        'min_detection_confidence': 0.5
+    }
+]
 
-    print('Face tracking active. Press "q" to quit.')
-    print()
+face_mesh = None
+config_used = None
 
-    last_time = time.time()
+# Prova le diverse configurazioni fino a trovarne una che funziona
+for i, config in enumerate(face_mesh_configs):
+    try:
+        print(f"Tentativo configurazione {i+1}: {config}")
+        face_mesh = mp_face_mesh.FaceMesh(**config)
+        config_used = i + 1
+        print(f"✓ Configurazione {i+1} funziona!")
+        break
+    except Exception as e:
+        print(f"✗ Configurazione {i+1} fallita: {e}")
+        continue
 
+if face_mesh is None:
+    raise RuntimeError("Nessuna configurazione di FaceMesh funziona. Prova a fare downgrade di mediapipe: pip install mediapipe==0.9.3.0")
+
+print(f"Usando configurazione FaceMesh #{config_used}")
+print('Face tracking active. Press "q" to quit.')
+print()
+
+last_time = time.time()
+
+try:
     while True:
         current_time = time.time()
         dt = current_time - last_time
@@ -248,8 +289,6 @@ with mp_face_mesh.FaceMesh(
             start_x = x_face - width_out/2
             stop_x = x_face + width_out/2
 
-
-
         # Crop the image
         image_crop = image[int(start_y):int(stop_y), int(start_x):int(stop_x), :]
 
@@ -261,12 +300,11 @@ with mp_face_mesh.FaceMesh(
             cv2.circle(image, (x_face, y_face), 5, (0, 255, 0), -1)
         elif face_detected:
             cv2.circle(image, (x_face, y_face), 5, (0, 255, 255), -1)
-            
+
         cv2.rectangle(image,
                       (int(start_x), int(start_y)),
                       (int(stop_x), int(stop_y)),
                       (0, 255, 0), 2)
-
 
         # Display frames (show both original with tracking box and cropped result)
         cv2.imshow('Original with Tracking', image)
@@ -290,6 +328,13 @@ with mp_face_mesh.FaceMesh(
             print("Quit system")
             break
 
+except Exception as e:
+    print(f"Errore durante l'esecuzione: {e}")
+    print("Se l'errore persiste, prova: pip install mediapipe==0.9.3.0")
+
+finally:
     # Release the capture and close windows
     vc.release()
     cv2.destroyAllWindows()
+    if face_mesh:
+        face_mesh.close()
